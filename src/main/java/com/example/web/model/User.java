@@ -10,4 +10,15 @@ public class User {
     private String introduction;//用户的介绍
     private Date createdDate;//用户的注册时间
 
+    public void setUsername(String username) {
+    }
+
+    public void setPassword(String password) {
+    }
+
+    public void setIntroduction(String introduction) {
+    }
+
+    public void setCreatedDate(Date date) {
+    }
 }
