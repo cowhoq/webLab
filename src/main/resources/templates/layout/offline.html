@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="description" content="Programming forum about Java powered by Spring Framework"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>Internet Forum</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <style>
+        .nav-wrapper{
+            background-color: #0951B5; /* 将背景颜色设置为您指定的颜色 */
+        }
+
+        .page-footer {
+            background-color: #0951B5 !important; /* 将背景颜色设置为您指定的颜色 */
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        header, section, footer {
+            padding: 20px 0;
+            background: #fff;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1, section h2, footer h3 {
+            color: #0951B5;
+        }
+
+        /* Additional styles for your list items and other content */
+
+        /* You can also add media queries for responsive design */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 15px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .card-content {
+            line-height: 1.6;
+        }
+
+    </style>
+</head>
+<body>
+<nav>
+    <div class="nav-wrapper">
+        <div class="container">
+            <ul id="nav-left" class="left hide-on-med-and-down">
+                <li><a th:href="@{'/'}" style="font-size:25px;color:white">web开发技术基础论坛</a></li>
+            </ul>
+
+            <ul id="nav-left" class="right hide-on-med-and-down">
+                <li><a th:href="@{'/'}">主页</a></li>
+                <li><a th:href="@{'/login'}">登录</a></li>
+                <li><a th:href="@{'/register'}">注册</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<main layout:fragment="content">
+    <p>Default content</p>
+</main>
+<footer class="page-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col l6 s12">
+                <h5 class="white-text">JAVAAWEBFORUM</h5>
+                <p class="white-text">致力于校内交流的社交平台。</p>
+                <p class="white-text">你想说的，都在这里。</p>
+            </div>
+
+        </div>
+    </div>
+</footer>
+<script type="text/javascript"  src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript"  src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+</body>
+</html>
