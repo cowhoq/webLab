@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-color: #eceef2;
+        }
+
+        nav {
+            background-color: #0951B5;
+        }
+
+        h2, h3 {
+            font-size: 24px;
+        }
+
+        p {
+            font-size: 16px;
+        }
+
+        .btn {
+            background-color: #f44336;
+        }
+
+        .page-footer {
+            background-color: #0951B5;
+        }
+
+        /* 新添加的样式 */
+        .profile-header, .data-section, .activity-section {
+            padding: 10px 0;
+        }
+
+        .collection-item {
+            font-size: 16px;
+        }
+
+        #uploaded-photos img {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="nav-wrapper">
+        <a href="#" class="brand-logo center">web开发技术基础</a>
+        <ul id="nav-right">
+            <li><a>返回</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="container">
+    <article>
+        <!-- 个人介绍部分 -->
+        <header class="profile-header">
+            <h2 th:text="${otherUser.getUsername()} + ' | JF'">个人介绍：</h2>
+            <p th:text="'用户名: ' + ${otherUser.getUsername()}"><strong>用户名:</strong> JohnDoe</p>
+            <p th:text="'Points: ' + ${points}"><strong>Points:</strong> 120</p>
+        </header>
+
+        <!-- 个人数据部分 -->
+        <section class="data-section">
+            <h3>个人数据：</h3>
+            <p th:text="'注册时间: ' + ${otherUser.displayParsedDate()}"><strong>注册时间:</strong> January 2021</p>
+            <p><strong>粉丝数:</strong> 35</p>
+        </section>
+
+        <!-- 活跃度部分 -->
+        <section class="activity-section">
+            <h3>活跃度：</h3>
+            <p th:text="'话题: ' + ${numberOfTopics}"><strong>话题:</strong> 10</p>
+            <p th:text="'回复: ' + ${numberOfAnswers}"><strong>回复:</strong> 42</p>
+            <p th:text="'帮助过的人: ' + ${numberOfHelped}"><strong>帮助过的人:</strong> 15</p>
+        </section>
+
+        <!-- 照片墙部分 -->
+        <section id="photo-wall-section">
+            <h3>Photo Wall</h3>
+            <div id="uploaded-photos">
+                <!-- 已上传的图片将显示在这里 -->
+                <th:block th:each="imgUrl : ${myImgs}">
+                    <img th:src="${imgUrl}" style="max-width: 300px; max-height: 300px;">
+                </th:block>
+            </div>
+        </section>
+
+        <!-- 上传照片部分 -->
+        <section>
+            <h3>Upload Photo</h3>
+            <form th:action="@{'/upload'}" method="post" enctype="multipart/form-data">
+                <div class="file-field input-field">
+                    <div class="btn">
+                        <span>选择照片</span>
+                        <input type="file" name="file">
+                    </div>
+                    <div class="file-path-wrapper">
+                        <input class="file-path validate" type="text">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 center">
+                        <button class="btn waves-effect waves-light btn-large" type="submit" name="add">上传</button>
+                    </div>
+                </div>
+            </form>
+        </section>
+    </article>
+</main>
+
+<footer class="page-footer">
+    <div class="container">
+        <h5>JAVAFORUM</h5>
+        <p>A platform dedicated to in-school communication.</p>
+        <p>Everything you want to say is here.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+<!-- JavaScript 逻辑 -->
+<script>
+    document.getElementById('upload-button').addEventListener('click', function() {
+        const fileInput = document.getElementById('photo-input');
+        const file = fileInput.files[0];
+
+        if (file) {
+            // 创建一个 FormData 对象来构建要发送的数据
+            let formData = new FormData();
+            formData.append('photo', file);
+
+            // 发送请求到服务器
+            fetch('/upload-to-qiniu', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    // 可以在这里处理上传成功的响应
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    // 可以在这里处理错误情况
+                });
+        }
+    });
+
+</script>
+</body>
+</html>

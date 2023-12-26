@@ -21,4 +21,8 @@ public class User {
 
     public void setCreatedDate(Date date) {
     }
+
+    public Long getId() {
+        return id;
+    }
 }
