@@ -1,10 +1,11 @@
 package com.example.web.dao;
 
 import com.example.web.model.Message;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
+@Mapper
 public interface MessageDao {
     String TABLE_NAME = "message";
     String INSERT_FIELDS = "from_id,to_id,content,created_date,id_topic,has_read";

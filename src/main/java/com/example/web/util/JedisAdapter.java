@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+@Service
 public class JedisAdapter {
     private static final Logger logger = LoggerFactory.getLogger(JedisAdapter.class);
     private JedisPool pool = null;

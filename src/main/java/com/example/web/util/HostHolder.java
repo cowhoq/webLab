@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import com.example.web.dao.UserDao;
 import com.example.web.model.User;
+@Component
 public class HostHolder {
     private User user;
 

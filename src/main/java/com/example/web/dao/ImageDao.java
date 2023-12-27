@@ -1,9 +1,11 @@
 package com.example.web.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import com.example.web.model.Image;
+@Mapper
 public interface ImageDao {
     String TABLE_NAME = "image";
     String INSERT_FIELDS = "imgUrl,id_user";

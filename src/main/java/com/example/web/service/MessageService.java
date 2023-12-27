@@ -3,6 +3,9 @@ package com.example.web.service;
 import java.util.List;
 import com.example.web.dao.MessageDao;
 import com.example.web.model.Message;
+import org.springframework.stereotype.Service;
+
+@Service
 public class MessageService {
     private MessageDao messageDao;
 

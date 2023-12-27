@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.web.dao.UserDao;
 import com.example.web.model.User;;
+@Service
 public class RegisterService {
     @Autowired
     UserDao userDao;

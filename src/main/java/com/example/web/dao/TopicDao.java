@@ -1,9 +1,11 @@
 package com.example.web.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import com.example.web.model.Topic;
+@Mapper
 public interface TopicDao {
     String TABLE_NAME = "topic";
     String INSERT_FIELDS = "title,content,category,created_date,code,id_user";
