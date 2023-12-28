@@ -31,7 +31,6 @@ public class QiniuService {
     Auth auth = Auth.create(ACCESS_KEY, SECRET_KEY);
     // 构造一个带指定Zone对象的配置类
     Configuration cfg = new Configuration(Zone.zone2());
-    // ...其他参数参考类注释
     UploadManager uploadManager = new UploadManager(cfg);
 
     private static String QINIU_IMAGE_DOMAIN = "http://ox6xu9hb7.bkt.clouddn.com/";
