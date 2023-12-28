@@ -20,6 +20,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
+
 @Controller
 public class ProfileController {
 
@@ -43,59 +44,41 @@ public class ProfileController {
     @Autowired
     private HostHolder hostHolder;
 
-
     @Autowired
-    QiniuService qiniuService;
+    private QiniuService qiniuService;
 
-    @RequestMapping(path = "/profile", method = RequestMethod.GET)
-    public String displayMyProfile(Model model) {
-        User user = hostHolder.getUser();
-        logger.warn("[displayMyProfile] display profile, username:{}",user.getUsername());
-        Long points = userDao.getPoints(user.getId());
-//		jedisAdapter.zadd(rankKey, points, user.getUsername());
-
-        Long numberOfTopics = topicDao.countTopicsByUser_Id(user.getId());
-        Long numberOfAnswers = answerDao.countAnswersByUser_Id(user.getId());
-        Long numberOfHelped = answerDao.countAnswersByUser_IdAndUseful(user.getId(), true);
-        List<String> myImgs=imageDao.getImgByUserId(user.getId());
-        List<String> myAllImgs=imageDao.getAllImgByUserId(user.getId());
+    private void populateModelWithUserData(Model model, Long userId, boolean isSelf) {
+        User user = userDao.getUserById(userId);
+        Long points = userDao.getPoints(userId);
+        Long numberOfTopics = topicDao.countTopicsByUser_Id(userId);
+        Long numberOfAnswers = answerDao.countAnswersByUser_Id(userId);
+        Long numberOfHelped = answerDao.countAnswersByUser_IdAndUseful(userId, true);
+        List<String> myImgs = imageDao.getImgByUserId(userId);
+        List<String> myAllImgs = imageDao.getAllImgByUserId(userId);
 
         model.addAttribute("user", user);
-        model.addAttribute("newMessage", messageDao.countMessageByToId(user.getId()));
+        model.addAttribute("newMessage", messageDao.countMessageByToId(userId));
         model.addAttribute("points", points);
         model.addAttribute("numberOfTopics", numberOfTopics);
         model.addAttribute("numberOfAnswers", numberOfAnswers);
         model.addAttribute("numberOfHelped", numberOfHelped);
         model.addAttribute("myImgs", myImgs);
-        model.addAttribute("isHasMoreImg", myAllImgs.size()>myImgs.size());
-        model.addAttribute("switch", true);
+        model.addAttribute("isHasMoreImg", myAllImgs.size() > myImgs.size());
+        model.addAttribute("switch", isSelf);
+    }
+
+    @RequestMapping(path = "/profile", method = RequestMethod.GET)
+    public String displayMyProfile(Model model) {
+        User user = hostHolder.getUser();
+        populateModelWithUserData(model, user.getId(), true);
         return "profile";
     }
 
     @RequestMapping(path = "/profile/{id}", method = RequestMethod.GET)
     public String displayProfileById(@PathVariable Long id, Model model) {
-        User user = userDao.getUserById(id);
-        logger.warn("[displayMyProfile] display profile, username:{}",user.getUsername());
-        Long points = userDao.getPoints(user.getId());
-        Long numberOfTopics = topicDao.countTopicsByUser_Id(id);
-        Long numberOfAnswers = answerDao.countAnswersByUser_Id(id);
-        Long numberOfHelped = answerDao.countAnswersByUser_IdAndUseful(id, true);
-        List<String> myImgs=imageDao.getImgByUserId(user.getId());
-        List<String> myAllImgs=imageDao.getAllImgByUserId(user.getId());
-        User otherUser=hostHolder.getUser();
-
-
-        model.addAttribute("user", otherUser);
-        model.addAttribute("otherUser", user);
-        model.addAttribute("newMessage", messageDao.countMessageByToId(hostHolder.getUser().getId()));
-        model.addAttribute("points", points);
-        model.addAttribute("numberOfTopics", numberOfTopics);
-        model.addAttribute("numberOfAnswers", numberOfAnswers);
-        model.addAttribute("numberOfHelped", numberOfHelped);
-        model.addAttribute("myImgs", myImgs);
-        model.addAttribute("isHasMoreImg", myAllImgs.size()>myImgs.size());
-        model.addAttribute("switch", (user.getId()==otherUser.getId())?true:false);
-
+        User otherUser = hostHolder.getUser();
+        populateModelWithUserData(model, id, id.equals(otherUser.getId()));
+        model.addAttribute("otherUser", userDao.getUserById(id));
         return "profile";
     }
 
@@ -123,51 +106,26 @@ public class ProfileController {
 
     @RequestMapping(path="/imageWall/{id}",method=RequestMethod.GET)
     public String imageWall(@PathVariable Long id, Model model) {
-        User user = userDao.getUserById(id);
-        List<String> myAllImgs=imageDao.getAllImgByUserId(user.getId());
-
-        model.addAttribute("user", user);
-        model.addAttribute("myImgs", myAllImgs);
-        model.addAttribute("newMessage", messageDao.countMessageByToId(user.getId()));
+        populateModelWithUserData(model, id, false);
         return "imageWall";
     }
 
-    @RequestMapping(path="/upload",method=RequestMethod.POST)
+    @RequestMapping(path="/upload", method=RequestMethod.POST)
     public String uploadImage(@RequestParam("file") MultipartFile file, HttpServletRequest request, Model model) {
         try {
-            String fileUrl=qiniuService.saveImage(file);
-//			if(fileUrl == null) {
-//				return ForumUtil.getJSONString(1, "上传图片失败");
-//			}
-            Image image=new Image();
+            String fileUrl = qiniuService.saveImage(file);
+            Image image = new Image();
             image.setImgUrl(fileUrl);
             image.setIdUser(hostHolder.getUser().getId());
             imageDao.addImg(image);
 
-            User user = hostHolder.getUser();
-            Long points = userDao.getPoints(user.getId());
-            Long numberOfTopics = topicDao.countTopicsByUser_Id(user.getId());
-            Long numberOfAnswers = answerDao.countAnswersByUser_Id(user.getId());
-            Long numberOfHelped = answerDao.countAnswersByUser_IdAndUseful(user.getId(), true);
-            List<String> myImgs=imageDao.getImgByUserId(user.getId());
-            List<String> myAllImgs=imageDao.getAllImgByUserId(user.getId());
-            model.addAttribute("user", user);
-            model.addAttribute("otherUser", user);
-            model.addAttribute("newMessage", messageDao.countMessageByToId(user.getId()));
-            model.addAttribute("points", points);
-            model.addAttribute("numberOfTopics", numberOfTopics);
-            model.addAttribute("numberOfAnswers", numberOfAnswers);
-            model.addAttribute("numberOfHelped", numberOfHelped);
-            model.addAttribute("myImgs", myImgs);
-            model.addAttribute("isHasMoreImg", myAllImgs.size()>myImgs.size());
-            model.addAttribute("switch", true);
+            populateModelWithUserData(model, hostHolder.getUser().getId(), true);
             return "profile";
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error uploading image: ", e);
             return "profile";
         }
     }
-
 
     @RequestMapping(path = "/profile/message", method = RequestMethod.GET)
     public View topicsTransform(HttpServletRequest request) {
@@ -181,4 +139,3 @@ public class ProfileController {
         return new RedirectView(contextPath + "/message");
     }
 }
-

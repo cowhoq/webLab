@@ -84,12 +84,4 @@ public class EventModel {
         return this;
     }
 
-    public Map<String, String> getExts() {
-        return exts;
-    }
-
-    public void setExts(Map<String, String> exts) {
-        this.exts = exts;
-    }
-
 }
