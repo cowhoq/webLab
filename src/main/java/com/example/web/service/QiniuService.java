@@ -33,7 +33,7 @@ public class QiniuService {
     Configuration cfg = new Configuration(Zone.zone2());
     UploadManager uploadManager = new UploadManager(cfg);
 
-    private static String QINIU_IMAGE_DOMAIN = "http://ox6xu9hb7.bkt.clouddn.com/";
+    private static String QINIU_IMAGE_DOMAIN = "http://s67ldz9od.hb-bkt.clouddn.com/";
 
     // 简单上传，使用默认策略，只需要设置上传的空间名就可以了
     public String getUpToken() {
@@ -56,7 +56,7 @@ public class QiniuService {
             Response res = uploadManager.put(file.getBytes(), fileName, getUpToken());
             // 打印返回的信息
             if (res.isOK() && res.isJson()) {
-                // 返回这张存储照片的地址http://ox6xu9hb7.bkt.clouddn.com/f07ff5a8945b4d6fb1bfc4cc8910e0fb.png，json串格式为：{"msg":"http://ox6xu9hb7.bkt.clouddn.com/f07ff5a8945b4d6fb1bfc4cc8910e0fb.png","code":0}
+
                 return QINIU_IMAGE_DOMAIN + JSONObject.parseObject(res.bodyString()).get("key");
             } else {
                 logger.error("七牛异常:" + res.bodyString());
