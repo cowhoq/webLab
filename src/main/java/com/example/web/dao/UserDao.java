@@ -12,5 +12,4 @@ public interface UserDao {
     int addUser(User user);
     User getUserByUsername(@Param("username") String username);
     User getUserById(@Param("id") Long id);
-    Long getPoints(@Param("id") Long id);
 }

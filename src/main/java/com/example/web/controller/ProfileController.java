@@ -49,7 +49,6 @@ public class ProfileController {
 
     private void populateModelWithUserData(Model model, Long userId, boolean isSelf) {
         User user = userDao.getUserById(userId);
-        Long points = userDao.getPoints(userId);
         Long numberOfTopics = topicDao.countTopicsByUser_Id(userId);
         Long numberOfAnswers = answerDao.countAnswersByUser_Id(userId);
         Long numberOfHelped = answerDao.countAnswersByUser_IdAndUseful(userId, true);
@@ -58,7 +57,6 @@ public class ProfileController {
 
         model.addAttribute("user", user);
         model.addAttribute("newMessage", messageDao.countMessageByToId(userId));
-        model.addAttribute("points", points);
         model.addAttribute("numberOfTopics", numberOfTopics);
         model.addAttribute("numberOfAnswers", numberOfAnswers);
         model.addAttribute("numberOfHelped", numberOfHelped);

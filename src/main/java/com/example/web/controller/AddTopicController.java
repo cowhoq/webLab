@@ -41,7 +41,6 @@ public class AddTopicController {
     @RequestMapping(path = "/addTopic", method = RequestMethod.GET)
     public String displayMyProfile(Model model) {
         User user = hostHolder.getUser();
-        Long points = userDao.getPoints(user.getId());
 
         Long numberOfTopics = topicDao.countTopicsByUser_Id(user.getId());
         Long numberOfAnswers = answerDao.countAnswersByUser_Id(user.getId());
@@ -49,7 +48,6 @@ public class AddTopicController {
 
         model.addAttribute("user", user);
         model.addAttribute("newMessage", messageDao.countMessageByToId(user.getId()));
-        model.addAttribute("points", points);
         model.addAttribute("numberOfTopics", numberOfTopics);
         model.addAttribute("numberOfAnswers", numberOfAnswers);
         model.addAttribute("numberOfHelped", numberOfHelped);
@@ -59,7 +57,7 @@ public class AddTopicController {
     @RequestMapping(path = "/addTopic/{id}", method = RequestMethod.GET)
     public String displayProfileById(@PathVariable Long id, Model model) {
         User user = userDao.getUserById(id);
-        Long points = userDao.getPoints(user.getId());
+
 
         Long numberOfTopics = topicDao.countTopicsByUser_Id(id);
         Long numberOfAnswers = answerDao.countAnswersByUser_Id(id);
@@ -67,7 +65,6 @@ public class AddTopicController {
 
         model.addAttribute("user", user);
         model.addAttribute("newMessage", messageDao.countMessageByToId(user.getId()));
-        model.addAttribute("points", points);
         model.addAttribute("numberOfTopics", numberOfTopics);
         model.addAttribute("numberOfAnswers", numberOfAnswers);
         model.addAttribute("numberOfHelped", numberOfHelped);
